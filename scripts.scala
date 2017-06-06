@@ -38,3 +38,8 @@ val totalIncome = fullBase.withColumn("income", $"price" * $"quantity")
 val groupSum = totalIncome.groupBy("pname", "rname", "month").sum().
                  select('pname as "product", 'rname as "region", 'month,
                         $"sum(income)" as "income")
+
+// Convert to DataSet
+case class Income(product: String, region: String, month: Int, income: Double)
+val groupDS = groupSum.as[Income]
+groupDS.show
